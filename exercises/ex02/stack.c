@@ -27,6 +27,8 @@ License: GNU GPLv3
     were the same because the program removed the stack frame of foo() and 
     reused the same space for bar(). Because they shared the same code at the
     beginning, the address of the array variable was identical.
+    4. I got a segmentation fault because the program cannot find the intended
+    memory when printing the array in main().
 */
 
 #define SIZE 5
