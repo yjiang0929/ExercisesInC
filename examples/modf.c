@@ -32,6 +32,30 @@ length: number of elements in the array
 returns: new array, caller must free
 */
 // TODO: Write this function
+double* get_int_part(double *array, int length) {
+    double* result = malloc(length*sizeof(double));
+    int i;
+
+    for (i=0; i<length; i++) {
+        double frac, inte;
+        frac = modf(array[i], &inte);
+        result[i] = inte;
+    }
+    return result;
+}
+
+double *get_both_parts(double* array, int length, double** frac_ref) {
+    double* int_part = malloc(length*sizeof(double));
+    double* frac_part = malloc(length*sizeof(double));
+    *frac_ref = frac_part;
+
+    int i;
+
+    for (i=0;i<length;i++) {
+        frac_part[i] = modf(array[i], &int_part[i]);
+    }
+    return int_part;
+}
 
 void test_get_int_part()
 {
