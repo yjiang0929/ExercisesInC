@@ -5,6 +5,7 @@ License: MIT License https://opensource.org/licenses/MIT
 */
 
 #include <stdlib.h>
+#include <stdint.h>
 
 // generate a random float using the algorithm described
 // at http://allendowney.com/research/rand
@@ -78,7 +79,39 @@ float my_random_float2()
 // compute a random double using my algorithm
 double my_random_double()
 {
-    // TODO: fill this in
+    // create 64 bit numbers because doubles are 64 bits
+    int64_t x;
+    int64_t mant;
+    // smallest negative exponent is -1022
+    int64_t exp = 1022;
+    int64_t mask = 1;
+    union {
+        double d;
+        int64_t i;
+    } b;
+
+    while (1) {
+        // generate a 64 bit random number
+        x = random() << 32 | random();
+        if (x==0) {
+            // if the random number is 0, deduct 64 from the exponent
+            exp -= 64; 
+        } else {
+            break;
+        }
+    }
+
+    // find the location of the first set bit, compute the exponent like float
+    while (x & mask) {
+        mask <<= 1;
+        exp--;
+    }
+
+    // use the remaining bit as mantissa and put together the double number
+    mant = x >> 11;
+    b.i = (exp << 52) | mant;
+
+    return b.d;
 }
 
 // return a constant (this is a dummy function for time trials)

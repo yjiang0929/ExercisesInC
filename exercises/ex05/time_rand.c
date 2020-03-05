@@ -4,6 +4,11 @@ Copyright 2016 Allen B. Downey
 License: MIT License https://opensource.org/licenses/MIT
 */
 
+/*
+  4. random_float() is the fastest random number generator.
+  6. random_double() is faster than my_random_double().
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -74,6 +79,9 @@ main(int argc, char *argv[])
     time = time_func(iters, my_random_float2);
     printf("%f ms \t my_random_float2\n", time);
 
-    time = time_func(iters, random_float);
-    printf("%f ms \t random_float\n", time);
+    time = time_func(iters, random_double);
+    printf("%f ms \t random_double\n", time);
+
+    time = time_func(iters, my_random_double);
+    printf("%f ms \t my_random_double\n", time);
 }
