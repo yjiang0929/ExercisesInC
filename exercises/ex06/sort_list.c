@@ -107,8 +107,9 @@ returns: >0 if a > b
           0 if a==b
 */
 int compare_nodes(const void* a, const void* b) {
-    // FILL THIS IN!
-    return 0;
+    Node **node_a = (Node **)a;
+    Node **node_b = (Node **)b;
+    return (*node_a)->val - (*node_b)->val;
 }
 
 int main() {
