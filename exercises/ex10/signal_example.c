@@ -19,6 +19,7 @@ Based on an example in Head First C.
 #include <signal.h>
 
 int score = 0;
+int last_question = 0;
 
 /* Set up a signal handler.
 
@@ -44,8 +45,13 @@ void end_game(int sig)
 /* Signal handler: Notify the user and raise SIGINT.
 */
 void times_up(int sig) {
-    puts("\nTIME'S UP!");
-    raise(SIGINT);
+    if (last_question) {
+        puts("\nTIME'S UP!");
+        raise(SIGINT);
+    } else {
+        puts("\nTIME'S UP, LAST QUESTION!");
+        last_question = 1;
+    }
 }
 
 int main(void) {
@@ -71,13 +77,19 @@ int main(void) {
         alarm(5);
 
         // get the answer
+        char *ret;
         while (1) {
-            char *ret = fgets(txt, 4, stdin);
-            if (ret) break;
+            ret = fgets(txt, 4, stdin);
+            if (ret || last_question) break;
         }
-        answer = atoi(txt);
+
+        // if this question timed out, continue to the next
+        if (last_question && !ret) {
+            continue;
+        }
 
         // check the answer
+        answer = atoi(txt);
         if (answer == a * b) {
             printf("\nRight!\n");
             score++;
@@ -85,6 +97,11 @@ int main(void) {
             printf("\nWrong!\n");
         }
         printf("Score: %i\n", score);
+        
+        // check if this is last question
+        if (last_question) {
+            raise(SIGINT);
+        }
     }
     return 0;
 }
