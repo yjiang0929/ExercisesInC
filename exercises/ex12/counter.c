@@ -5,11 +5,17 @@ License: GNU GPLv3
 
 */
 
+/* 2. The final counter value is correct. 
+   3. Evidence that the code is running concurrently is that many counters share
+   the same initial value. There is no synchronization error because the final
+   value always equals the number of child threads. 
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 
-#define NUM_CHILDREN 5
+#define NUM_CHILDREN 1000
 
 /* Print an error message and exit.
 */
